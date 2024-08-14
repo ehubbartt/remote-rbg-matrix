@@ -31,7 +31,7 @@ def update_display(pixel_data):
         print("Invalid data length, should be 4096 items")
         return
     
-    matrix.brightness = 100
+    matrix.brightness = curBrightness
     
     for i in range(64):
         for j in range(64):
@@ -49,7 +49,7 @@ def brightnessListener(event):
     if event.data:
         global curBrightness
         curBrightness = event.data
-        matrix.brightness = curBrightness
+        update_display(curData)
 
 # Attach Firebase listener
 db.reference('matrixData').listen(imageListener)
