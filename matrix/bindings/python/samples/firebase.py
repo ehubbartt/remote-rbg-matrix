@@ -9,7 +9,7 @@ cred = credentials.Certificate('/home/ethan/remote-rbg-matrix/matrix/bindings/py
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://remote-led-matrix-default-rtdb.firebaseio.com/'
 })
-
+print("Firebase initialized")
 # Initialize LED Matrix with options suitable for the bonnet
 options = RGBMatrixOptions()
 options.rows = 64
