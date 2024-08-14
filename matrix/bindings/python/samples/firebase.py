@@ -11,12 +11,16 @@ firebase_admin.initialize_app(cred, {
 })
 print("Firebase initialized")
 # Initialize LED Matrix with options suitable for the bonnet
+
+curBrightness = 50
+curData = [0] * 64 * 64
+
 options = RGBMatrixOptions()
 options.rows = 64
 options.cols = 64
 options.chain_length = 1
 options.parallel = 1
-options.brightness = 50 
+options.brightness = curBrightness # default value 1-100
 options.hardware_mapping = 'adafruit-hat'  # Ensures correct hardware mapping for the bonnet
 options.gpio_slowdown = 4
 
@@ -33,12 +37,21 @@ def update_display(pixel_data):
             r, g, b = pixel_data[index]
             matrix.SetPixel(j, i, r, g, b)
 
-def listener(event):
+def imageListener(event):
     if event.data:
+        global curData
+        curData = event.data
         update_display(event.data)
 
+def brightnessListener(event):
+    if event.data:
+        global curBrightness
+        curBrightness = event.data
+        matrix.brightness = curBrightness
+
 # Attach Firebase listener
-db.reference('matrixData').listen(listener)
+db.reference('matrixData').listen(imageListener)
+db.reference('brightness').listen(brightnessListener)
 
 # Keep the program running
 while True:
