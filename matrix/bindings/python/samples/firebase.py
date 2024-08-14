@@ -13,7 +13,7 @@ print("Firebase initialized")
 # Initialize LED Matrix with options suitable for the bonnet
 
 curBrightness = 50
-curData = [0, 0, 0] * 64 * 64
+curData = [[0, 0, 0] for _ in range(64 * 64)] 
 
 options = RGBMatrixOptions()
 options.rows = 64
