@@ -31,6 +31,8 @@ def update_display(pixel_data):
         print("Invalid data length, should be 4096 items")
         return
     
+    matrix.brightness = 100
+    
     for i in range(64):
         for j in range(64):
             index = i * 64 + j
