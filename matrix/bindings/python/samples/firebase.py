@@ -33,7 +33,7 @@ def update_display(pixel_data):
 
 def listener(event):
     if event.data:
-        print(event.data)
+        update_display(event.data)
 
 # Attach Firebase listener
 db.reference('matrixData').listen(listener)
