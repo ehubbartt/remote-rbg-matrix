@@ -10,17 +10,18 @@ firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://remote-led-matrix-default-rtdb.firebaseio.com/'
 })
 print("Firebase initialized")
-# Initialize LED Matrix with options suitable for the bonnet
 
+# Initialize LED Matrix with options suitable for the bonnet
 curBrightness = 50
-curData = [[0, 0, 0] for _ in range(64 * 64)] 
+curData = [[0, 0, 0] for _ in range(64 * 64)]
+isOn = False
 
 options = RGBMatrixOptions()
 options.rows = 64
 options.cols = 64
 options.chain_length = 1
 options.parallel = 1
-options.brightness = curBrightness # default value 1-100
+options.brightness = curBrightness  # default value 1-100
 options.hardware_mapping = 'adafruit-hat'  # Ensures correct hardware mapping for the bonnet
 options.gpio_slowdown = 4
 
@@ -31,29 +32,43 @@ def update_display(pixel_data):
         print("Invalid data length, should be 4096 items")
         return
     
-    matrix.brightness = curBrightness
-    
-    for i in range(64):
-        for j in range(64):
-            index = i * 64 + j
-            r, g, b = pixel_data[index]
-            matrix.SetPixel(j, i, r, g, b)
+    if isOn:
+        matrix.brightness = curBrightness
+        
+        for i in range(64):
+            for j in range(64):
+                index = i * 64 + j
+                r, g, b = pixel_data[index]
+                matrix.SetPixel(j, i, r, g, b)
+    else:
+        matrix.Clear()  # Clear the matrix if isOn is False
 
 def imageListener(event):
     if event.data:
-        global curData
+        global curData, isOn
         curData = event.data
+        isOn = True  # Automatically turn on the display when new image data is received
+        db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(event.data)
 
 def brightnessListener(event):
     if event.data:
-        global curBrightness
+        global curBrightness, isOn
         curBrightness = event.data
+        isOn = True  # Automatically turn on the display when brightness is changed
+        db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(curData)
 
-# Attach Firebase listener
+def isOnListener(event):
+    global isOn
+    if event.data is not None:
+        isOn = event.data
+        update_display(curData)
+
+# Attach Firebase listeners
 db.reference('matrixData').listen(imageListener)
 db.reference('brightness').listen(brightnessListener)
+db.reference('isOn').listen(isOnListener)
 
 # Keep the program running
 while True:
