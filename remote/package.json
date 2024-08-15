@@ -16,6 +16,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "firebase": "^10.12.5",
-    "firebase-auth": "^0.1.2"
+    "firebase-auth": "^0.1.2",
+    "svelte-routing": "^2.13.0"
   }
 }
