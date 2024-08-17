@@ -4,12 +4,23 @@ from firebase_admin import credentials, db
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate('/home/ethan/remote-rbg-matrix/matrix/bindings/python/cert/firebase-cert.json')
 
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://remote-led-matrix-default-rtdb.firebaseio.com/'
-})
+
 print("Firebase initialized")
+
+def connect_to_firebase():
+    try:
+        cred = credentials.Certificate('/home/ethan/remote-rbg-matrix/matrix/bindings/python/cert/firebase-cert.json')
+        firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://remote-led-matrix-default-rtdb.firebaseio.com/'
+        })
+        print("Firebase initialized")
+    except Exception as e:
+        print(f"Failed to initialize Firebase: {e}")
+        time.sleep(5)
+        connect_to_firebase()
+
+connect_to_firebase()
 
 # Initialize LED Matrix with options suitable for the bonnet
 curBrightness = 50
