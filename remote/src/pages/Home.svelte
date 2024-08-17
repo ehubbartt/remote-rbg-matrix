@@ -38,7 +38,7 @@
     </button>
     <Link to="upload" class="button">Upload Image</Link>
     <Link to="draw" class="button">Draw Image</Link>
-    <Link to="presets" class="button">Choose Preset</Link>
+    <!-- <Link to="presets" class="button">Choose Preset</Link> -->
   </div>
 </main>
 

@@ -27,6 +27,7 @@
         canvas.height = 64;
         ctx.drawImage(img, 0, 0, 64, 64);
 
+        // Get image data and push to Firebase
         const imageData = ctx.getImageData(0, 0, 64, 64);
         const pixels = imageData.data;
         const matrixData = [];
@@ -41,7 +42,6 @@
         const dbRef = ref(db, "matrixData");
         set(dbRef, matrixData);
       };
-      // @ts-ignore
       img.src = e.target.result;
     };
 
@@ -57,5 +57,14 @@
     accept="image/*"
     on:change={handleImageUpload}
   />
-  <canvas bind:this={canvas} style="display:none;"></canvas>
+  <canvas bind:this={canvas} style="border: 1px solid black;"></canvas>
 </main>
+
+<style>
+  canvas {
+    margin-top: 10px;
+    width: 128px; /* Scale canvas for easier viewing */
+    height: 128px; /* Scale canvas for easier viewing */
+    image-rendering: pixelated; /* Ensures the image looks pixelated, not blurry */
+  }
+</style>
