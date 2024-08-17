@@ -6,8 +6,6 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 # Initialize Firebase Admin SDK
 
 
-print("Firebase initialized")
-
 def connect_to_firebase():
     try:
         cred = credentials.Certificate('/home/ethan/remote-rbg-matrix/matrix/bindings/python/cert/firebase-cert.json')
