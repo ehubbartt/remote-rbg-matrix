@@ -59,22 +59,19 @@ def update_display(pixel_data):
 def imageListener(event):
     print("Image data changed")
     sys.stdout.flush()
-    if event.data:
+    if event.data and isOn:
         global curData, isOn
         curData = event.data
-        isOn = True  # Automatically turn on the display when new image data is received
         db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(event.data)
 
 def brightnessListener(event):
     print("Brightness changed")
     sys.stdout.flush()
-    if event.data:
-        print(event.data)
+    if event.data and isOn:
         sys.stdout.flush()
         global curBrightness, isOn
         curBrightness = event.data
-        isOn = True  # Automatically turn on the display when brightness is changed
         db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(curData)
 
@@ -82,7 +79,7 @@ def isOnListener(event):
     print("isOn changed")
     sys.stdout.flush()
     global isOn
-    if event.data is not None:
+    if event.data:
         isOn = event.data
         update_display(curData)
 
