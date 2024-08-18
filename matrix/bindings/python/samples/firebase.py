@@ -53,6 +53,7 @@ def update_display(pixel_data):
         matrix.Clear()  # Clear the matrix if isOn is False
 
 def imageListener(event):
+    print("Image data changed")
     if event.data:
         global curData, isOn
         curData = event.data
@@ -61,6 +62,7 @@ def imageListener(event):
         update_display(event.data)
 
 def brightnessListener(event):
+    print("Brightness changed")
     if event.data:
         global curBrightness, isOn
         curBrightness = event.data
@@ -69,6 +71,7 @@ def brightnessListener(event):
         update_display(curData)
 
 def isOnListener(event):
+    print("isOn changed")
     global isOn
     if event.data is not None:
         isOn = event.data
