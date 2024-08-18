@@ -64,6 +64,7 @@ def imageListener(event):
 def brightnessListener(event):
     print("Brightness changed")
     if event.data:
+        print(event.data)
         global curBrightness, isOn
         curBrightness = event.data
         isOn = True  # Automatically turn on the display when brightness is changed
