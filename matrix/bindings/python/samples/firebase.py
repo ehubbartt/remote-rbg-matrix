@@ -60,26 +60,24 @@ def imageListener(event):
     print("Image data changed")
     sys.stdout.flush()
     global curData, isOn
-    if event.data and isOn:
+    if event.data:
         curData = event.data
-        db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(event.data)
 
 def brightnessListener(event):
     print("Brightness changed")
     sys.stdout.flush()
-    if event.data and isOn:
+    global curBrightness, isOn
+    if event.data:
         sys.stdout.flush()
-        global curBrightness, isOn
         curBrightness = event.data
-        db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(curData)
 
 def isOnListener(event):
     print("isOn changed")
     sys.stdout.flush()
     global isOn
-    if event.data:
+    if event.data is not None:
         isOn = event.data
         update_display(curData)
 
