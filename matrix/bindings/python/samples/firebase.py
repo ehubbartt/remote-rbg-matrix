@@ -2,6 +2,7 @@ import time
 import firebase_admin
 from firebase_admin import credentials, db
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
+import sys
 
 # Initialize Firebase Admin SDK
 
@@ -13,8 +14,10 @@ def connect_to_firebase():
         'databaseURL': 'https://remote-led-matrix-default-rtdb.firebaseio.com/'
         })
         print("Firebase initialized")
+        sys.stdout.flush()
     except Exception as e:
         print(f"Failed to initialize Firebase: {e}")
+        sys.stdout.flush()
         time.sleep(5)
         connect_to_firebase()
 
@@ -39,6 +42,7 @@ matrix = RGBMatrix(options=options)
 def update_display(pixel_data):
     if len(pixel_data) != 64 * 64:
         print("Invalid data length, should be 4096 items")
+        sys.stdout.flush()
         return
     
     if isOn:
@@ -54,6 +58,7 @@ def update_display(pixel_data):
 
 def imageListener(event):
     print("Image data changed")
+    sys.stdout.flush()
     if event.data:
         global curData, isOn
         curData = event.data
@@ -63,8 +68,10 @@ def imageListener(event):
 
 def brightnessListener(event):
     print("Brightness changed")
+    sys.stdout.flush()
     if event.data:
         print(event.data)
+        sys.stdout.flush()
         global curBrightness, isOn
         curBrightness = event.data
         isOn = True  # Automatically turn on the display when brightness is changed
@@ -73,6 +80,7 @@ def brightnessListener(event):
 
 def isOnListener(event):
     print("isOn changed")
+    sys.stdout.flush()
     global isOn
     if event.data is not None:
         isOn = event.data
