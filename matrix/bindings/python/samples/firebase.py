@@ -59,8 +59,8 @@ def update_display(pixel_data):
 def imageListener(event):
     print("Image data changed")
     sys.stdout.flush()
+    global curData, isOn
     if event.data and isOn:
-        global curData, isOn
         curData = event.data
         db.reference('isOn').set(True)  # Update the isOn field in the database
         update_display(event.data)
