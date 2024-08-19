@@ -35,7 +35,7 @@ options.chain_length = 1
 options.parallel = 1
 options.brightness = curBrightness  # default value 1-100
 options.hardware_mapping = 'adafruit-hat'  # Ensures correct hardware mapping for the bonnet
-options.gpio_slowdown = 2
+options.gpio_slowdown = 3
 
 matrix = RGBMatrix(options=options)
 
