@@ -55,6 +55,8 @@ def update_display(pixel_data):
                 matrix.SetPixel(j, i, r, g, b)
     else:
         matrix.Clear()  # Clear the matrix if isOn is False
+    status_ref = db.reference('lastUpdateMs')
+    status_ref.set(str(int(time.time() * 1000)))
 
 def imageListener(event):
     print("Image data changed")
