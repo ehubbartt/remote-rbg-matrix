@@ -108,20 +108,36 @@ def isOnListener(event):
         sys.stdout.flush()
 
 def attach_firebase_listeners():
-    try:
-        db.reference('matrixData').listen(imageListener)
-        db.reference('brightness').listen(brightnessListener)
-        db.reference('isOn').listen(isOnListener)
-    except Exception as e:
-        print(f"Failed to attach Firebase listeners: {e}")
-        sys.stdout.flush()
-        time.sleep(5)
-        attach_firebase_listeners()
+    max_retries = 20
+    retry_delay = 20
+    
+    for attempt in range(max_retries):
+        try:
+            db.reference('matrixData').listen(imageListener)
+            db.reference('brightness').listen(brightnessListener)
+            db.reference('isOn').listen(isOnListener)
+            print("Successfully attached all listeners")
+            sys.stdout.flush()
+            return True
+        except Exception as e:
+            print(f"Attempt {attempt + 1}/{max_retries} failed to attach Firebase listeners: {e}")
+            sys.stdout.flush()
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
+    
+    print("Failed to attach listeners after all retries")
+    sys.stdout.flush()
+    return False
 
 attach_firebase_listeners()
 
 while True:
     try:
+        if not firebase_admin._apps:
+            print("Firebase connection lost, attempting to reconnect...")
+            sys.stdout.flush()
+            if connect_to_firebase():
+                attach_firebase_listeners()
         time.sleep(1)
     except KeyboardInterrupt:
         print("Program interrupted by user")
